@@ -9,6 +9,7 @@ plt.rcParams['figure.figsize'] = [5, 5]
 from glob import glob
 import os
 from copy import deepcopy
+import pickle
 
 import numpy as np
 from skimage import util
@@ -178,7 +179,12 @@ class SwisstopoDataset:
         return image
 
     def _process_image(self, img_id):
-        image = self._fetch_image(img_id)
+        try:
+            image = self._fetch_image(img_id)
+        except Exception as e:
+            warn(f"{'*'*5} Problem loading image id: {img_id} {'*'*5}")
+            raise e
+        
         if self.transform is not None:
             image = self.transform(image)
         else:
@@ -270,15 +276,21 @@ metadata_raw_df.info()
 # %% [markdown]
 # We use the column `image_id` from the metadata as index of the images and then we perform standard shufling and splitting.
 # 
-# The final ratio for the train, validation and test dastasets are: 70, 29 and 1 % respectively
+# ~~The final ratio for the train, validation and test dastasets are: 70, 29 and 1 % respectively~~
+# 
+# The final ratio for the train, validation and test dastasets are: 59, 25 and 16 % respectively.
+# 
+# NOTE: we add additonal ~3000 images for computing the FID score metrics, rusulting in roughly using 10K images for training/valiation (in a ratio of 70/30% repectively) and 3K images for testing. Total images used were 12960.
+# 
 
 # %%
 dataX, dataY = metadata_raw_df["img_id"].to_list(), metadata_raw_df["class"] .to_list()
 
 rand_state = 9898
-train_ratio = 0.70
-validation_ratio = 0.29
-test_ratio = 0.01
+
+train_ratio = 0.5866
+validation_ratio = 0.2514
+test_ratio = 0.162
 
 
 
@@ -292,7 +304,7 @@ x_val, x_test, y_val, y_test = train_test_split(x_test, y_test, test_size=test_r
 print(f"the size fo the train dataset is: {len(x_train)}.\nthe size fo the validation dataset is: {len(x_val)}.\nthe size fo the test dataset is: {len(x_test)}.")
 
 # %%
-b_size = 64
+b_size =64
 
 # Instantiate the dataset
 # img_indices = [0, 1, 2, 3, 4, 5]  # Example indices
@@ -387,8 +399,14 @@ callbacks = [
             save_best_only=False,
             save_weights_only = False,
             verbose=1
-            )
+            ),
+            keras.callbacks.CSVLogger(os.path.join(checkpoint_dir, name + "_" + 'history.csv'), append=True )
             ]
+
+# train_loss = []
+# val_loss = []
+# train_rmse = []
+# val_rmse = []
 
 
 if not os.path.exists(checkpoint_dir):
@@ -616,7 +634,9 @@ else:
         print(f'Fail to load model with error ---->>>> {exc} <<<<----')
 
 
-
+with open(os.path.join(checkpoint_dir, name + '_history_dict'), 'wb') as file:
+    pickle.dump(history.history, file)
+    print(f"{'*' * 5} History file saved with pickle {'*' * 5}")
 
 # %% [markdown]
 # ## start training loop
@@ -636,9 +656,9 @@ else:
 
 # %%
 # Evaluate the model on the test dataset
-test_loss, test_accuracy = loaded_model.evaluate(test_dataset)
-print(f'Test Loss: {test_loss}')
-print(f'Test Accuracy: {test_accuracy}')
+# test_loss, test_accuracy = loaded_model.evaluate(test_dataset)
+# print(f'Test Loss: {test_loss}')
+# print(f'Test Accuracy: {test_accuracy}')
 
 
 # %% [markdown]
@@ -663,13 +683,13 @@ plt.show()
 
 # Plot the training and validation accuracy
 plt.figure(figsize=(12, 6))
-plt.plot(history.history['accuracy'], label='Training Accuracy')
-plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.plot(history.history['RootMeanSquaredError'], label='Training Accuracy')
+plt.plot(history.history['val_RootMeanSquaredError'], label='Validation Accuracy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.legend()
 plt.title('Training and Validation Accuracy')
-plt.savefig(os.path.join(checkpoint_dir, f'{name}_accuracy.png'), dpi=100)
+plt.savefig(os.path.join(checkpoint_dir, f'{name}_rmse.png'), dpi=100)
 # plt.savefig(sys.stdout.buffer)
 plt.show()
 
