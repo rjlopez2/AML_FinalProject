@@ -21,7 +21,7 @@ This repositry contain the script we used to perform the following task
 - [data preparation](scripts/preprocessing_tf.ipynb)
 - [Model training](scripts/UBELIX) usign containers to the HPC UBELIX
 - [Model metrics](scripts/compute_models_metrics.py)  and [history plots](scripts/plot_model_history.ipynb)
-- Model inference with color or grey images
+- [Model inference](scripts/inference_swissimage.ipynb) with color or grey images
 
 ## Data and Models weights availability
 
