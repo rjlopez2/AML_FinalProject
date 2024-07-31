@@ -17,8 +17,8 @@ Example of image colorization results using diferent models.
 
 This repositry contain the script we used to perform the following task
 
-- data retrieval: is located 
-- [data preparation](scripts/retrieve_data_clean.ipynb)
+- [data retrieval](scripts/retrieve_data_clean.ipynb)
+- [data preparation](scripts/preprocessing_tf.ipynb)
 - [Model training](scripts/UBELIX) usign containers to the HPC UBELIX
 - [Model metrics](scripts/compute_models_metrics.py)  and [history plots](scripts/plot_model_history.ipynb)
 - Model inference with color or grey images
