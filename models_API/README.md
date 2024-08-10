@@ -83,7 +83,7 @@ s
    docker run --name colorization -d -p 8000:8000 colorization
    ```
 
-   This command will start the container in detached mode (`-d`) and map port 80 inside the container to port 8000 on your host machine.
+   This command will start the container in detached mode (`-d`) and map port 8000 inside the container to port 8000 on your host machine.
 
 2. **Verify the container is running:**
    You can check if the container is running with:
@@ -94,7 +94,8 @@ s
    You should see your container listed with its ID and the port mappings.
 
 ## 4. Using the Application
-NOTE: this is a relative heavy application. It may take couple of second antil is ready to be used.
+> [!NOTE] 
+> This is a relative heavy application. It may take couple of second antil is ready to be used. 
 1. **Open your web browser:**
    - Navigate to `http://localhost:8000`.
 
