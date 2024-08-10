@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Map Tile Colorization</title>
+    <style>
+        /* Styling for the image container */
+        .image-container {
+            display: flex;
+            justify-content: space-between; /* Adjusts spacing between images */
+            gap: 10px; /* Space between images */
+        }
+        /* Ensure images have a consistent height */
+        .image-container img {
+            height: auto;
+            max-width: 100%; /* Ensures images do not exceed container width */
+        }
+        .image-title {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <h1>Map Tile Colorization Prediction</h1>
@@ -39,18 +57,27 @@
                         {% for image in images %}
                             <li>
                                 <h3>Time: {{ image.time }}</h3>
-                                
-                                <!-- Original Color Image -->
-                                <h4>Original Color Image</h4>
-                                <img src="data:image/jpeg;base64,{{ image.original_color_image }}" alt="Original Color Image" width="300"/><br><br>
-                                
-                                <!-- Original Grey Image -->
-                                <h4>Original Grey Image</h4>
-                                <img src="data:image/jpeg;base64,{{ image.original_grey_image }}" alt="Original Grey Imagee" width="300"/><br><br>
-                                
-                                <!-- Predicted Image -->
-                                <h4>Predicted Image</h4>
-                                <img src="data:image/jpeg;base64,{{ image.predicted_image }}" alt="Predicted Image" width="300"/><br><br>
+
+                                <!-- Container for side-by-side images -->
+                                <div class="image-container">
+                                    <!-- Original Color Image -->
+                                    <div>
+                                        <h4 class="image-title">Original Color Image</h4>
+                                        <img src="data:image/jpeg;base64,{{ image.original_color_image }}" alt="Original Color Image"/>
+                                    </div>
+
+                                    <!-- Original Grey Image -->
+                                    <div>
+                                        <h4 class="image-title">Original Grey Image</h4>
+                                        <img src="data:image/jpeg;base64,{{ image.original_grey_image }}" alt="Original Grey Image"/>
+                                    </div>
+
+                                    <!-- Predicted Image -->
+                                    <div>
+                                        <h4 class="image-title">Predicted Image</h4>
+                                        <img src="data:image/jpeg;base64,{{ image.predicted_image }}" alt="Predicted Image"/>
+                                    </div>
+                                </div>
                                 
                             </li>
                         {% endfor %}
