@@ -26,7 +26,7 @@
 <body>
     <h1>Map Tile Colorization Prediction</h1>
     <form method="post" action="/predict">
-        <label for="coordinates">Coordinates (e.g., 7.452668, 46.945518):</label><br>
+        <label for="coordinates">Coordinates (e.g., 7.452668, 46.945518. For multiples coordinates, seperate them using ; e.g. 7.448803, 46.949160; 8.083485, 46.437945; 7.795686, 46.183638; 7.144503, 47.002594):</label><br>
         <input type="text" id="coordinates" name="coordinates" required><br><br>
 
         <label for="zoom_level">Zoom Level:</label><br>
@@ -45,7 +45,7 @@
             {% endfor %}
         </select><br><br>
 
-        <input type="submit" value="Submit">
+        <input type="submit" value="Colorize">
     </form>
 
     {% if predictions %}
