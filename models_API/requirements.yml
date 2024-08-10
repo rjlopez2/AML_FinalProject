@@ -1,4 +1,4 @@
-name: colorization
+name: base
 channels:
   - conda-forge
   - pytorch
@@ -6,7 +6,7 @@ dependencies:
   - python
   # - numpy
   # - pip
-  - pandas
+  # - pandas
   - matplotlib
   # - scikit-image=0.17.2
   # - scikit-learn=0.24.2

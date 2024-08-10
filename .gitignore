@@ -85,3 +85,10 @@ venv/
 
 # ignore .sif images files
 **/img/*.sif
+
+# ignore .joblib files
+*.joblib
+
+# ignore .joblib files
+*.keras
+
