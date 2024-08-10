@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Tile Colorization</title>
+</head>
+<body>
+    <h1>Map Tile Colorization Prediction</h1>
+    <form method="post">
+        <label for="coordinates">Coordinates (e.g., 8.5417,47.3769;8.543,47.377):</label><br>
+        <input type="text" id="coordinates" name="coordinates" required><br><br>
+
+        <label for="zoom_level">Zoom Level:</label><br>
+        <input type="number" id="zoom_level" name="zoom_level" required><br><br>
+
+        <label for="layer_name">Layer Name:</label><br>
+        <input type="text" id="layer_name" name="layer_name" value="ch.swisstopo.swissimage" required><br><br>
+
+        <label for="times">Times (comma-separated, e.g., current,past):</label><br>
+        <input type="text" id="times" name="times" value="current" required><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if predictions %}
+        <h2>Predictions</h2>
+        {% for coord, images in predictions.items() %}
+            <div>
+                <h3>Coordinates: {{ coord }}</h3>
+                {% for image in images %}
+                    <p>Time: {{ image.time }}</p>
+                    <p>Original Image:</p>
+                    <img src="data:image/jpeg;base64,{{ image.original_image }}" alt="Original Image">
+                    <p>Predicted Image:</p>
+                    <img src="data:image/jpeg;base64,{{ image.predicted_image }}" alt="Predicted Image">
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% elif error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>

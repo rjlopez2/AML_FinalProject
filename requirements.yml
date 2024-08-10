@@ -32,6 +32,7 @@ dependencies:
   - ipython
   - fastapi
   - joblib
+  - flask
   - pip:
     - git+https://github.com/rjlopez2/toloboy.git
   #   # - tensorflow==2.1.0

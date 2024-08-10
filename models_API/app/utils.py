@@ -2,7 +2,6 @@ import math
 import requests
 from PIL import Image
 from io import BytesIO
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
@@ -46,19 +45,6 @@ class SwisstopoTileFetcher:
                 if image:
                     self.fetched_tiles[(longitude, latitude)].append((time, image))
 
-    def show_tiles(self):
-        self.fetch_all_tiles()
-        for (longitude, latitude), image_list in self.fetched_tiles.items():
-            fig, axes = plt.subplots(1, len(image_list), figsize=(15, 5))
-            fig.suptitle(f"Coordinates: ({longitude, latitude})")
-            if len(image_list) == 1:
-                axes = [axes]
-            for ax, (time, image) in zip(axes, image_list):
-                ax.imshow(image)
-                ax.set_title(f"Time: {time}")
-                ax.axis('off')
-            plt.show()
-
     def get_tiles(self):
         return self.fetched_tiles
 
@@ -78,7 +64,8 @@ def RGB2LAB2(R0, G0, B0):
 
 class ConvertRGBToFeedModel(torch.nn.Module):
     def forward(self, img):
-        img = np.asanyarray(img)
+        img = np.asarray(img)
+        # print(f"Image shape: {img.shape}") 
         sz_x = img.shape[0]
         sz_y = img.shape[1]
         train_imgs = np.zeros((sz_x, sz_y, 2))
@@ -100,8 +87,10 @@ def create_grayscale_tiles(fetched_tiles):
     for (longitude, latitude), image_list in fetched_tiles.items():
         grayscale_tiles[(longitude, latitude)] = []
         for time, image in image_list:
-            L, _ = converter.forward(image)
-            grayscale_image = Image.fromarray((L[:, :, 0] * 255).astype(np.uint8))
-            grayscale_tiles[(longitude, latitude)].append((time, grayscale_image))
+            orig_L, origi_AB = converter.forward(image)
+            # print(f"Predicted L shape (in utils): {orig_L.shape}") 
+            grayscale_image = Image.fromarray((orig_L[:, :, 0] * 255).astype(np.uint8))
+            # grayscale_tiles[(longitude, latitude)].append((time, grayscale_image))
+            grayscale_tiles[(longitude, latitude)].append((time, grayscale_image, image, orig_L, origi_AB))
 
     return grayscale_tiles
