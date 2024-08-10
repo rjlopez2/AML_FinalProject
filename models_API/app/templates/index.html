@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Tile Colorization</title>
+    <style>
+        /* Styling for the image container */
+        .image-container {
+            display: flex;
+            justify-content: space-between; /* Adjusts spacing between images */
+            gap: 10px; /* Space between images */
+        }
+        /* Ensure images have a consistent height */
+        .image-container img {
+            height: auto;
+            max-width: 100%; /* Ensures images do not exceed container width */
+        }
+        .image-title {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Map Tile Colorization Prediction</h1>
+    <form method="post" action="/predict">
+        <label for="coordinates">Coordinates (e.g., 7.452668, 46.945518. For multiples coordinates, seperate them using ; e.g. 7.448803, 46.949160; 8.083485, 46.437945; 7.795686, 46.183638; 7.144503, 47.002594):</label><br>
+        <input type="text" id="coordinates" name="coordinates" required><br><br>
+
+        <label for="zoom_level">Zoom Level:</label><br>
+        <input type="number" id="zoom_level" name="zoom_level" required><br><br>
+
+        <label for="layer_name">Layer Name:</label><br>
+        <input type="text" id="layer_name" name="layer_name" value="ch.swisstopo.swissimage" required><br><br>
+
+        <label for="times">Times (comma-separated, e.g., current,past):</label><br>
+        <input type="text" id="times" name="times" value="current" required><br><br>
+
+        <label for="model_name">Model:</label><br>
+        <select id="model_name" name="model_name" required>
+            {% for model_name in model_names %}
+                <option value="{{ model_name }}">{{ model_name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Colorize">
+    </form>
+
+    {% if predictions %}
+        <h2>Predictions:</h2>
+        <ul>
+            {% for coord, images in predictions.items() %}
+                <li>Coordinates: {{ coord }}
+                    <ul>
+                        {% for image in images %}
+                            <li>
+                                <h3>Time: {{ image.time }}</h3>
+
+                                <!-- Container for side-by-side images -->
+                                <div class="image-container">
+                                    <!-- Original Color Image -->
+                                    <div>
+                                        <h4 class="image-title">Original Color Image</h4>
+                                        <img src="data:image/jpeg;base64,{{ image.original_color_image }}" alt="Original Color Image"/>
+                                    </div>
+
+                                    <!-- Original Grey Image -->
+                                    <div>
+                                        <h4 class="image-title">Original Grey Image</h4>
+                                        <img src="data:image/jpeg;base64,{{ image.original_grey_image }}" alt="Original Grey Image"/>
+                                    </div>
+
+                                    <!-- Predicted Image -->
+                                    <div>
+                                        <h4 class="image-title">Predicted Image</h4>
+                                        <img src="data:image/jpeg;base64,{{ image.predicted_image }}" alt="Predicted Image"/>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif error %}
+        <p style="color: red;">Error: {{ error }}</p>
+    {% endif %}
+</body>
+</html>
