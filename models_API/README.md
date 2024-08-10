@@ -2,6 +2,9 @@
 
 This guide will help you set up and use the Map Tile Colorization application using Docker.
 
+> [!NOTE] 
+> Befoere you start, you must have the model stored in your local computer. Use the file `scripts/export_model_for_production.ipynb` to generate the models as `*.joblib` and make sure that they are located under the folder `models_API/app`.
+
 ## 1. Installing Docker
 
 ### For Windows and macOS
