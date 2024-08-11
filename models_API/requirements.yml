@@ -7,9 +7,9 @@ dependencies:
   # - numpy
   # - pip
   # - pandas
-  - matplotlib
-  # - scikit-image=0.17.2
-  # - scikit-learn=0.24.2
+  # - matplotlib
+  # # - scikit-image=0.17.2
+  # # - scikit-learn=0.24.2
   - pytorch
   - torchvision
   - tensorflow
@@ -18,18 +18,19 @@ dependencies:
   # - numpy=1.19.2
   - numpy
   # - jupyter_contrib_nbextensions
-  - nb_conda_kernels
+  # - nb_conda_kernels
   - pillow
   ###### Lorenz's Libs ######
   - pyproj
   - folium
   ###### extras ######
-  - scikit-image
-  - scikit-learn
-  - tqdm
-  - jupyterlab
-  - nodejs
-  - ipython
+  # - scikit-image
+  # - scikit-learn
+  # - tqdm
+  # - jupyterlab
+  # - nodejs
+  # - ipython
+  ###### API interface ######
   - fastapi
   - joblib
   - flask
